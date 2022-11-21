@@ -1,22 +1,47 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import useProducts from '../../hooks/useProduct';
+import { addToDb, getCartStore} from '../../utilities/fakedb';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
 import './Shop.css'
 
 const Shop = () => {
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useProducts();
     const [cart, setCart] = useState([])
 
     useEffect(() => {
-        fetch('products.json')
-        .then(res => res.json())
-        .then(data => setProducts(data))
-    },[])
+        const storedCart = getCartStore()
+        const saveCart = [];
+        for(const id in storedCart){
+            const addedProduct = products.find(product => product.id === id)
+            if(addedProduct){
+                const quantity = storedCart[id];
+                addedProduct.quantity = quantity
+                saveCart.push(addedProduct)
+            }
+            setCart(saveCart)
+        }
+    },[products])
 
-    const handelAddToCart = (product) => {
-        console.log(product);
-        const newCart = [...cart, product]
+
+    const handelAddToCart = (selectedProduct) => {
+        let newCart = [];
+        const exits =  cart.find(product => product.id === selectedProduct.id);
+        // jodi brand new hoy, jodi cart na take product:
+        if(!exits){
+            selectedProduct.quantity = 1;
+            newCart = [...cart, selectedProduct]
+        }
+        else{
+            // jodi cart product take tahole condition / slectedProduct id sara baki gula add hobe
+            const rest = cart.filter(products => products.id !== selectedProduct.id);
+            exits.quantity = exits.quantity + 1;
+            newCart = [...rest, exits]
+             
+        }
         setCart(newCart)
+        addToDb(selectedProduct.id)
     }
     return (
         <div className='shop-container'>
@@ -30,7 +55,11 @@ const Shop = () => {
                 }
             </div>
             <div className="cart-container">
-                <Cart cart = {cart}></Cart>
+                <Cart cart = {cart}>
+                    <Link to='/orders'>
+                        <button className='cart-bottom-btn'>Review Order</button>
+                    </Link>
+                </Cart>
             </div>
         </div>
     );

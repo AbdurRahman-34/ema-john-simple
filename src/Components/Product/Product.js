@@ -7,7 +7,12 @@ const Product = ({product, handelAddToCart}) => {
     const  {name, img, seller, price, ratings} = product;
     return (
         <div className='product'>
-            <img src={img} alt="" />
+
+            
+            <img src={img ? img : 'https://pleper.com/html/assets/img/no-image-found.jpg'}  alt=""/> 
+
+
+
             <div className='product-info'>
             <p className='product-name'>{name}</p>
             <p>Price : ${price}</p>

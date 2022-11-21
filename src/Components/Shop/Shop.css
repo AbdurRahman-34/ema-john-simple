@@ -9,8 +9,16 @@
     margin: 100px 50px;
 }
 .cart-container {
-    background-color: #2a414fbd;
-    padding: 30px;
+    background-color: #ECEFF1;
+}
+.cart-bottom-btn {
+    background-color: #2a414f;
+    padding: 8px 38px;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
 }
 @media screen and (max-width: 1100px) {
     .products-container{

@@ -31,6 +31,7 @@ const Signup = () => {
     if(user){
         navigate('/shop')
     }
+    
     const handelCreateUser = e => {
         e.preventDefault()
         if(password !== confirmpass){
